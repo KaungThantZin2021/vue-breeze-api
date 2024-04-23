@@ -1,21 +1,19 @@
 <template>
   <div>
     <h1>Home</h1>
-    <h1>{{ user?.name }}</h1>
+    <h1>{{ userAuth.user?.name }}</h1>
+    <h1>{{ userAuth.user?.email }}</h1>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import axios from 'axios';
+import { onMounted } from 'vue';
+import { userAuthStore } from '../stores/auth';
 
-const user = ref({});
+const userAuth = userAuthStore();
 
 onMounted(async () => {
-  const response = await axios.get('/api/user');
-  console.log(response.data);
-
-  user.value = response.data;
+  await userAuth.getUser();
 
 });
 </script>
