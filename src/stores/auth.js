@@ -46,6 +46,17 @@ export const userAuthStore = defineStore("auth", {
             .catch((error) => {
                 console.log(error);
             });
+        },
+        async handleLogout() {
+            this.getToken();
+            await axios.post("/logout")
+            .then((response) => {
+                this.authUser = null;
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         }
     }
 })

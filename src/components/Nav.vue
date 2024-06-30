@@ -19,16 +19,23 @@
                             <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Home</a>
                         </RouterLink>
                     </li>
-                    <li>
-                        <RouterLink to="/login">
-                            <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Login</a>
-                        </RouterLink>
-                    </li>
-                    <li>
-                        <RouterLink to="/register">
-                            <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Register</a>
-                        </RouterLink>
-                    </li>
+                    <template v-if="!authStore.user">
+                        <li>
+                            <RouterLink to="/login">
+                                <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Login</a>
+                            </RouterLink>
+                        </li>
+                        <li>
+                            <RouterLink to="/register">
+                                <a href="#" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Register</a>
+                            </RouterLink>
+                        </li>
+                    </template>
+                    <template v-else>
+                        <li>
+                            <a href="#" @click="authStore.handleLogout" class="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500" aria-current="page">Logout</a>
+                        </li>
+                    </template>
                 </ul>
                 </div>
             </div>
@@ -36,3 +43,8 @@
     </div>
 
 </template>
+
+<script setup>
+import { userAuthStore } from '../stores/auth';
+const authStore = userAuthStore();
+</script>
