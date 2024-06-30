@@ -27,7 +27,7 @@
             <form
               class="space-y-4 md:space-y-6"
               action="#"
-              @submit.prevent="handleLogin"
+              @submit.prevent="authStore.handleLogin(form)"
             >
               <div>
                 <label
@@ -112,30 +112,15 @@
 
 <script setup>
 import { ref } from "vue";
-import axios from "axios";
-import { useRouter } from "vue-router";
 import { RouterLink } from "vue-router";
+import { userAuthStore } from "../stores/auth";
+
+const authStore = userAuthStore();
 
 const form = ref({
   email: "",
   password: "",
 });
 
-const router = useRouter();
 
-const handleLogin = async () => {
-  await axios.get("/sanctum/csrf-cookie");
-  await axios
-    .post("/login", {
-      email: form.value.email,
-      password: form.value.password,
-    })
-    .then((response) => {
-      console.log(response.data);
-      router.push("/");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
 </script>
