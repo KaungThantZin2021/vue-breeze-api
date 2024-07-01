@@ -3,10 +3,12 @@ import { defineStore } from "pinia";
 
 export const userAuthStore = defineStore("auth", {
     state: () => ({
-        authUser: null
+        authUser: null,
+        authErrors: []
     }),
     getters: {
-        user: (state) => state.authUser
+        user: (state) => state.authUser,
+        errors: (state) => state.authErrors
     },
     actions: {
         async getToken() {
@@ -26,11 +28,12 @@ export const userAuthStore = defineStore("auth", {
                 password_confirmation: data.password_confirmation,
             })
             .then((response) => {
-                console.log(response.data);
                 this.router.push("/");
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.status == 422) {
+                    this.authErrors = error.response.data.errors;
+                }
             });
         },
         async handleLogin(data) {
@@ -40,11 +43,12 @@ export const userAuthStore = defineStore("auth", {
                 password: data.password,
             })
             .then((response) => {
-                console.log(response.data);
                 this.router.push("/");
             })
             .catch((error) => {
-                console.log(error);
+                if (error.response.status == 422) {
+                    this.authErrors = error.response.data.errors;
+                }
             });
         },
         async handleLogout() {
@@ -57,6 +61,21 @@ export const userAuthStore = defineStore("auth", {
             .catch((error) => {
                 console.log(error);
             });
+        },
+        async handleForgotPassword(data) {
+            this.getToken();
+            try {
+                await axios.post("/forgot-password", {
+                    email: data.email
+                })
+                .then((response) => {
+                    // this.router.push("/");
+                });
+            } catch (error) {
+                if (error.response.status == 422) {
+                    this.authErrors = error.response.data.errors;
+                }
+            }
         }
     }
 })
